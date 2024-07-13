@@ -8,10 +8,6 @@ export const postOrderV = [
         .isFloat()
         .notEmpty()
         .withMessage("Price needs to be a number"),
-    check("date")
-        .isDate()
-        .notEmpty()
-        .withMessage("Date needs to be a date"),
     check("user_id")
         .isInt()
         .notEmpty()

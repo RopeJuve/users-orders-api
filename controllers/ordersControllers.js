@@ -26,6 +26,11 @@ export const getOrderById = async (req, res) => {
 export const createOrder = async (req, res) => {
   try {
     const { price, date, user_id } = req.body;
+    if (!date) {
+      date = new Date();
+    } else {
+      date = new Date(date);
+    }
     const { rows } = await pool.query(
       "INSERT INTO orders (price, date, user_id) VALUES ($1, $2, $3) RETURNING *",
       [price, date, user_id]

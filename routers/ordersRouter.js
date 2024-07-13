@@ -14,6 +14,7 @@ import {
 import {
   checkValidation,
   checkOrderExists,
+  checkBeforeCreateOrder,
 } from "../middlewares/ordersMiddlewares.js";
 
 const ordersRouter = express.Router();
@@ -26,7 +27,13 @@ ordersRouter.get(
   checkOrderExists,
   getOrderById
 );
-ordersRouter.post("/", postOrderV, checkValidation, createOrder);
+ordersRouter.post(
+  "/",
+  postOrderV,
+  checkValidation,
+  checkBeforeCreateOrder,
+  createOrder
+);
 ordersRouter.put(
   "/:id",
   checkOrderIdV,

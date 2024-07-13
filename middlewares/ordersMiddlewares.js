@@ -8,7 +8,19 @@ export const checkValidation = (req, res, next) => {
     }
     next();
 }
+export const checkBeforeCreateOrder = async (req, res, next) => {
+    const { date } = req.body;
+    try{
+        const { rows } = await pool.query("SELECT * FROM orders WHERE date = $1", [date]);
+        if (rows.length > 0) {
+            return res.status(400).json({ error: "Order already exists" });
+        }
+        next();
+    }catch(error){
+        res.status(500).send(error.message);
+    }
 
+}
 export const checkOrderExists = async (req, res, next) => {
     const { id } = req.params;
     const { rows } = await pool.query("SELECT * FROM orders WHERE id = $1", [id]);
