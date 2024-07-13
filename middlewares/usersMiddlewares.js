@@ -1,6 +1,14 @@
 import { validationResult } from "express-validator";
 import { pool } from "../db.js";
 
+export const checkValidation = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array()[0].msg });
+  }
+  next();
+};
+
 export const modifyBody = (req, res, next) => {
   const { first_name, last_name, email } = req.body;
   if (first_name && last_name) {
@@ -16,19 +24,7 @@ export const modifyBody = (req, res, next) => {
   next();
 };
 
-export const checkId = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ error: errors.array()[0].msg });
-  }
-  next();
-};
-
 export const checkUserBeforeCreate = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ error: errors.array()[0].msg });
-  }
   const { email } = req.body;
   const { rows } = await pool.query("SELECT * FROM users WHERE email = $1", [
     email,
@@ -40,10 +36,6 @@ export const checkUserBeforeCreate = async (req, res, next) => {
 };
 
 export const checkUser = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ error: errors.array()[0].msg });
-  }
   try {
     const { id } = req.params;
     const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [

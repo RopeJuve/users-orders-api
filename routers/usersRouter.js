@@ -5,20 +5,50 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  getUserOrders,
+  checkActivity,
 } from "../controllers/usersControllers.js";
 import {
-  checkId,
   checkUser,
   checkUserBeforeCreate,
   modifyBody,
+  checkValidation,
 } from "../middlewares/usersMiddlewares.js";
 import { checkIdV, postBodyV, putBodyV } from "../validators/userValidators.js";
 const usersRouter = express.Router();
 
 usersRouter.get("/", getUsers);
-usersRouter.get("/:id", checkIdV, checkId, checkUser, getUserById);
-usersRouter.post("/", postBodyV, checkUserBeforeCreate, modifyBody, createUser);
-usersRouter.put("/:id", checkIdV, putBodyV, checkId, checkUser, updateUser);
-usersRouter.delete("/:id", checkIdV, checkId, checkUser, deleteUser);
+usersRouter.get("/:id", checkIdV, checkValidation, checkUser, getUserById);
+usersRouter.get(
+  "/:id/orders",
+  checkIdV,
+  checkValidation,
+  checkUser,
+  getUserOrders
+);
+usersRouter.post(
+  "/",
+  postBodyV,
+  checkValidation,
+  checkUserBeforeCreate,
+  modifyBody,
+  createUser
+);
+usersRouter.put(
+  "/:id/check-inactive",
+  checkIdV,
+  checkValidation,
+  checkUser,
+  checkActivity
+);
+usersRouter.put(
+  "/:id",
+  checkIdV,
+  putBodyV,
+  checkValidation,
+  checkUser,
+  updateUser
+);
+usersRouter.delete("/:id", checkIdV, checkValidation, checkUser, deleteUser);
 
 export default usersRouter;
