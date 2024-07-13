@@ -39,15 +39,11 @@ export const checkUserBeforeCreate = async (req, res, next) => {
   next();
 };
 
-export const checkBeforeUpdate = (req, res, next) => {
+export const checkUser = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ error: errors.array()[0].msg });
   }
-  next();
-};
-
-export const checkUser = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [

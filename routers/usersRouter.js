@@ -10,7 +10,6 @@ import {
   checkId,
   checkUser,
   checkUserBeforeCreate,
-  checkBeforeUpdate,
   modifyBody,
 } from "../middlewares/usersMiddlewares.js";
 import { checkIdV, postBodyV, putBodyV } from "../validators/userValidators.js";
@@ -19,15 +18,7 @@ const usersRouter = express.Router();
 usersRouter.get("/", getUsers);
 usersRouter.get("/:id", checkIdV, checkId, checkUser, getUserById);
 usersRouter.post("/", postBodyV, checkUserBeforeCreate, modifyBody, createUser);
-usersRouter.put(
-  "/:id",
-  checkIdV,
-  putBodyV,
-  checkBeforeUpdate,
-  checkId,
-  checkUser,
-  updateUser
-);
+usersRouter.put("/:id", checkIdV, putBodyV, checkId, checkUser, updateUser);
 usersRouter.delete("/:id", checkIdV, checkId, checkUser, deleteUser);
 
 export default usersRouter;
